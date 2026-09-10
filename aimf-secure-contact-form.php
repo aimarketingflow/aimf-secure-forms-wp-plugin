@@ -3,7 +3,7 @@
  * Plugin Name: AIMF Secure Forms
  * Plugin URI: https://aimfsecurity.com
  * Description: A lightweight, security-hardened form builder with CSRF protection, honeypot, rate limiting, CAPTCHA support, anti-replay tokens, and admin submissions.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: AIMF Security
  * Author URI: https://aimfsecurity.com
  * License: GPL-2.0+
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Constants.
-define( 'AIMF_SCF_VERSION', '1.1.0' );
+define( 'AIMF_SCF_VERSION', '1.1.1' );
 define( 'AIMF_SCF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AIMF_SCF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'AIMF_SCF_TABLE_NAME', 'aimf_secure_contact_submissions' );
