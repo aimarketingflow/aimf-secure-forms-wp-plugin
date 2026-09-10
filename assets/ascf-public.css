@@ -1,0 +1,322 @@
+/**
+ * AIMF Secure Forms — Public Stylesheet
+ * Dark theme matching AIMF Security brand colors.
+ */
+
+/* ── Theme Compatibility (Divi, Elementor, etc.) ── */
+
+/* Reset box-sizing inside our wrapper — themes often set border-box globally */
+.ascf-form-wrapper,
+.ascf-form-wrapper *,
+.ascf-form-wrapper *::before,
+.ascf-form-wrapper *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Divi: prevent .et_pb_text_inner / .et_pb_code_inner from adding
+   white background and overriding our dark theme */
+.et_pb_text_inner .ascf-form-wrapper,
+.et_pb_code_inner .ascf-form-wrapper,
+.elementor-widget-text-editor .ascf-form-wrapper {
+    background: #0f0a1a !important;
+    color: #e5e7eb !important;
+    padding: 40px !important;
+    margin: 0 !important;
+}
+
+/* Divi: prevent theme from styling our form inputs as Divi form fields */
+.et_pb_text_inner .ascf-form-wrapper input:not([type="radio"]):not([type="checkbox"]),
+.et_pb_text_inner .ascf-form-wrapper textarea,
+.et_pb_text_inner .ascf-form-wrapper select,
+.et_pb_code_inner .ascf-form-wrapper input:not([type="radio"]):not([type="checkbox"]),
+.et_pb_code_inner .ascf-form-wrapper textarea,
+.et_pb_code_inner .ascf-form-wrapper select,
+.elementor-widget-text-editor .ascf-form-wrapper input:not([type="radio"]):not([type="checkbox"]),
+.elementor-widget-text-editor .ascf-form-wrapper textarea,
+.elementor-widget-text-editor .ascf-form-wrapper select {
+    background: #1a0f2e !important;
+    color: #fff !important;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    border-radius: 6px !important;
+    padding: 12px 14px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+}
+
+/* Divi: prevent theme from overriding our button */
+.et_pb_text_inner .ascf-submit-btn,
+.et_pb_code_inner .ascf-submit-btn,
+.elementor-widget-text-editor .ascf-submit-btn {
+    background: linear-gradient(135deg, #f97316 0%, #7c3aed 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 14px 32px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: none !important;
+}
+
+/* Divi: prevent theme from styling our labels */
+.et_pb_text_inner .ascf-field label,
+.et_pb_code_inner .ascf-field label,
+.elementor-widget-text-editor .ascf-field label {
+    color: #e5e7eb !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: 0.01em !important;
+}
+
+/* Container */
+.ascf-form-wrapper {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 40px;
+    background: #0f0a1a;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+/* Form */
+.ascf-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Fields */
+.ascf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* Labels */
+.ascf-field label {
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.ascf-required {
+    color: #ef4444;
+}
+
+/* Inputs */
+.ascf-input,
+.ascf-select,
+.ascf-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: #1a0f2e;
+    color: #fff;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.ascf-input::placeholder,
+.ascf-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ascf-input:focus,
+.ascf-select:focus,
+.ascf-textarea:focus {
+    border-color: #fb923c;
+    box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.15);
+}
+
+/* Select dropdown arrow — custom orange SVG */
+.ascf-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23fb923c' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+}
+
+.ascf-select option {
+    background: #1a0f2e;
+    color: #fff;
+}
+
+.ascf-textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+}
+
+/* Submit button */
+.ascf-submit-row {
+    margin-top: 0.5rem;
+}
+
+.ascf-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #f97316 0%, #7c3aed 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ascf-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+}
+
+.ascf-submit-btn:active {
+    transform: translateY(0);
+}
+
+.ascf-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Spinner */
+.ascf-submit-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: ascf-spin 0.6s linear infinite;
+}
+
+@keyframes ascf-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Response area */
+.ascf-response {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+}
+
+.ascf-response.ascf-success {
+    background: #0d2818;
+    border: 1px solid #22c55e;
+    color: #4ade80;
+}
+
+.ascf-response.ascf-error {
+    background: #2d0d0d;
+    border: 1px solid #ef4444;
+    color: #f87171;
+}
+
+/* Honeypot — hidden from real users, not display:none (bots detect that) */
+.ascf-honeypot {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+/* Radio & Checkbox groups */
+.ascf-radio-group,
+.ascf-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.ascf-radio-item,
+.ascf-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.ascf-form-wrapper .ascf-radio-item input[type="radio"],
+.ascf-form-wrapper .ascf-checkbox-item input[type="checkbox"] {
+    flex: 0 0 18px !important;
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border-radius: 50%;
+    box-shadow: none !important;
+    accent-color: #fb923c;
+    cursor: pointer;
+}
+.ascf-form-wrapper .ascf-checkbox-item input[type="checkbox"] {
+    border-radius: 3px;
+}
+.ascf-radio-item label,
+.ascf-checkbox-item label {
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    color: #e5e7eb;
+}
+
+/* Field description text */
+.ascf-field-desc {
+    font-size: 0.8rem;
+    color: rgba(229, 231, 235, 0.6);
+    margin-top: 0.25rem;
+}
+
+/* Turnstile widget container */
+#ascf-turnstile-container {
+    min-height: 65px;
+    overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .ascf-form-wrapper,
+    .et_pb_text_inner .ascf-form-wrapper,
+    .et_pb_code_inner .ascf-form-wrapper,
+    .elementor-widget-text-editor .ascf-form-wrapper {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 24px !important;
+    }
+
+    .ascf-submit-btn {
+        width: 100%;
+    }
+}

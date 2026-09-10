@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AIMF Secure Forms and Cloudflare Turnstile Setup Guide</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08060d;
+      --panel: #100a1c;
+      --panel-2: #19102b;
+      --text: #f4f1fa;
+      --muted: #b8afc8;
+      --border: rgba(167, 139, 250, .24);
+      --purple: #a78bfa;
+      --orange: #fb923c;
+      --green: #4ade80;
+      --red: #f87171;
+      --blue: #60a5fa;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(rgba(139, 92, 246, .055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, .055) 1px, transparent 1px),
+        radial-gradient(circle at 15% 0%, rgba(124, 58, 237, .2), transparent 34rem),
+        var(--bg);
+      background-size: 72px 72px, 72px 72px, auto, auto;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--purple); }
+    a:hover { color: #c4b5fd; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    code { color: #f5c2ff; }
+    .shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    .hero { padding: 72px 0 42px; }
+    .brand { display: flex; align-items: center; gap: 14px; color: var(--muted); font-weight: 700; }
+    .logo { width: 42px; height: 42px; }
+    .eyebrow { color: var(--orange); font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { max-width: 900px; margin: 22px 0 14px; font-size: clamp(2.3rem, 6vw, 5rem); line-height: 1.02; letter-spacing: -.045em; }
+    .gradient { background: linear-gradient(90deg, var(--orange), var(--purple)); background-clip: text; -webkit-background-clip: text; color: transparent; }
+    .lede { max-width: 820px; color: var(--muted); font-size: 1.12rem; }
+    .verified { display: inline-flex; gap: 9px; align-items: center; margin-top: 18px; padding: 9px 13px; border: 1px solid rgba(74, 222, 128, .35); border-radius: 999px; background: rgba(74, 222, 128, .08); color: var(--green); font-size: .86rem; font-weight: 750; }
+    .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 28px; padding-bottom: 80px; }
+    nav { position: sticky; top: 18px; align-self: start; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: rgba(16, 10, 28, .92); box-shadow: var(--shadow); }
+    nav strong { display: block; margin-bottom: 10px; }
+    nav a { display: block; padding: 7px 9px; border-radius: 7px; color: var(--muted); text-decoration: none; font-size: .9rem; }
+    nav a:hover { background: rgba(167, 139, 250, .1); color: var(--text); }
+    main { min-width: 0; }
+    section { margin-bottom: 24px; padding: 30px; border: 1px solid var(--border); border-radius: 16px; background: rgba(16, 10, 28, .92); box-shadow: var(--shadow); }
+    h2 { margin: 0 0 16px; font-size: 1.65rem; letter-spacing: -.025em; }
+    h3 { margin: 26px 0 10px; color: #ddd6fe; }
+    p { margin: 10px 0; }
+    ol, ul { padding-left: 1.35rem; }
+    li { margin: 6px 0; }
+    pre { overflow-x: auto; padding: 16px; border: 1px solid rgba(96, 165, 250, .2); border-radius: 10px; background: #08050d; color: #e9d5ff; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .card { padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--panel-2); }
+    .card h3 { margin-top: 0; }
+    .callout { margin: 16px 0; padding: 14px 16px; border-left: 4px solid var(--blue); border-radius: 8px; background: rgba(96, 165, 250, .08); }
+    .callout.good { border-color: var(--green); background: rgba(74, 222, 128, .08); }
+    .callout.warn { border-color: var(--orange); background: rgba(251, 146, 60, .08); }
+    .callout.danger { border-color: var(--red); background: rgba(248, 113, 113, .08); }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+    th, td { padding: 11px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { color: var(--purple); font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li::before { content: "□"; display: inline-block; width: 1.4rem; color: var(--orange); font-weight: 900; }
+    footer { padding: 28px 0 50px; color: var(--muted); text-align: center; }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      nav { position: static; }
+      .grid { grid-template-columns: 1fr; }
+      section { padding: 22px; }
+    }
+    @media print {
+      :root { color-scheme: light; --bg: #fff; --panel: #fff; --panel-2: #f7f5fb; --text: #111; --muted: #444; --border: #ddd; }
+      body { background: #fff; }
+      nav { display: none; }
+      .layout { display: block; }
+      section { box-shadow: none; break-inside: avoid; }
+      a { color: #5530a5; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero shell">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 32" fill="none" role="img" aria-label="AIMF Security logo">
+        <path d="M16 2 28 7v8c0 7-6 13-12 15C10 28 4 22 4 15V7Z" stroke="#e09900" stroke-width="2" fill="rgba(224,153,0,.08)"/>
+        <path d="m11 16 4 4 6-8" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      AIMF Security
+    </div>
+    <p class="eyebrow">Production setup and operations guide</p>
+    <h1>AIMF Secure Forms + <span class="gradient">Cloudflare Turnstile</span></h1>
+    <p class="lede">Complete instructions for installing the plugin, creating forms, embedding them in Divi, configuring Turnstile and Content Security Policy, testing submissions, and using YubiKey-encrypted exports.</p>
+    <div class="verified">Verified on aimfsecurity.com: form stored and Turnstile analytics populated</div>
+  </header>
+
+  <div class="layout shell">
+    <nav aria-label="Guide navigation">
+      <strong>Guide contents</strong>
+      <a href="#architecture">1. Architecture</a>
+      <a href="#install">2. Install and update</a>
+      <a href="#build">3. Build a form</a>
+      <a href="#divi">4. Add to Divi</a>
+      <a href="#turnstile">5. Configure Turnstile</a>
+      <a href="#csp">6. Configure CSP</a>
+      <a href="#cache">7. Clear caches</a>
+      <a href="#verify">8. Verify end to end</a>
+      <a href="#exports">9. Encrypted exports</a>
+      <a href="#troubleshoot">10. Troubleshooting</a>
+      <a href="#checklist">11. Launch checklist</a>
+    </nav>
+
+    <main>
+      <section id="architecture">
+        <h2>1. What the system does</h2>
+        <div class="grid">
+          <div class="card"><h3>AIMF Secure Forms</h3><p>Builds reusable WordPress forms, validates submissions, stores entries, sends notifications, and provides privacy controls.</p></div>
+          <div class="card"><h3>Cloudflare Turnstile</h3><p>Runs a browser challenge, issues a short-lived single-use token, and validates that token through Cloudflare Siteverify.</p></div>
+          <div class="card"><h3>Content Security Policy</h3><p>Controls which scripts, connections, frames, styles, and fonts the browser may load.</p></div>
+          <div class="card"><h3>YubiKey PIV 9D</h3><p>Holds the RSA private key used to decrypt configuration and submission exports. The private key never leaves the YubiKey.</p></div>
+        </div>
+        <h3>Submission security sequence</h3>
+        <ol>
+          <li>WordPress verifies the CSRF nonce and honeypot.</li>
+          <li>Per-IP and global rate limits are enforced.</li>
+          <li>The lazy-fetched, single-use JavaScript token is verified.</li>
+          <li>The server-signed form timestamp is validated.</li>
+          <li>Configured fields are sanitized and validated.</li>
+          <li>Turnstile is verified server-side and checked for the expected hostname and action.</li>
+          <li>Optional Akismet analysis runs.</li>
+          <li>The submission is stored and the notification is sent.</li>
+        </ol>
+      </section>
+
+      <section id="install">
+        <h2>2. Install or update the plugin</h2>
+        <ol>
+          <li>Back up the WordPress database.</li>
+          <li>Open <strong>Plugins → Add Plugin → Upload Plugin</strong>.</li>
+          <li>Select <code>aimf-secure-forms.zip</code>.</li>
+          <li>Select <strong>Install Now</strong>.</li>
+          <li>For an update, select <strong>Replace current with uploaded</strong>.</li>
+          <li>Confirm AIMF Secure Forms is active and reports version 1.1.0 or later.</li>
+        </ol>
+        <div class="callout good"><strong>Preserved during replacement:</strong> forms, settings, CAPTCHA keys, and stored submissions remain in WordPress. Do not delete the plugin when the goal is only to update it.</div>
+        <h3>Enable GitHub update notifications</h3>
+        <p>The plugin checks published GitHub Releases. A normal source push does not create a WordPress update notice. Each update needs a higher plugin version, matching tag, published release, and an attached asset named <code>aimf-secure-forms.zip</code>.</p>
+        <p>Because the repository is private, create a fine-grained GitHub token restricted to this repository with read-only Contents access. Add it above the stop-editing line in <code>wp-config.php</code>:</p>
+        <pre>define( 'AIMF_SCF_GITHUB_TOKEN', 'PASTE_READ_ONLY_TOKEN_HERE' );</pre>
+        <div class="callout danger">Never commit the token or enter it in plugin settings, form configuration, screenshots, or support messages. If the repository becomes public, remove this constant; public release checks need no token.</div>
+        <p>WordPress caches release metadata for six hours. Use <strong>Dashboard → Updates → Check again</strong> to request an immediate refresh.</p>
+      </section>
+
+      <section id="build">
+        <h2>3. Create and configure a form</h2>
+        <ol>
+          <li>Open <strong>AIMF Forms → Form Builder</strong>.</li>
+          <li>Select <strong>Add New Form</strong> or edit an existing form.</li>
+          <li>Add single-line, email, paragraph, dropdown, multiple-choice, checkbox, or number fields.</li>
+          <li>Select each field to configure its label, options, placeholder, description, and required state.</li>
+          <li>Set the notification email, success message, and submit button text.</li>
+          <li>Save and copy the generated shortcode.</li>
+        </ol>
+        <h3>Default form shortcode</h3>
+        <pre>[aimf_form id="1"]</pre>
+        <h3>Custom form shortcode</h3>
+        <pre>[aimf_form id="2"]</pre>
+        <div class="callout warn">Never request passwords, private keys, recovery codes, payment-card data, or detailed incident evidence through a general web form.</div>
+      </section>
+
+      <section id="divi">
+        <h2>4. Add the form to Divi</h2>
+        <ol>
+          <li>Open the page in Divi Builder.</li>
+          <li>Add a <strong>Code Module</strong> where the form should appear.</li>
+          <li>Paste only the selected shortcode.</li>
+          <li>Save the module and page.</li>
+          <li>Exit Visual Builder and test the published page.</li>
+        </ol>
+        <pre>[aimf_form id="1"]</pre>
+        <p>The form fills the available Divi module width. Set overall width through the Divi row and column settings.</p>
+      </section>
+
+      <section id="turnstile">
+        <h2>5. Configure Cloudflare Turnstile</h2>
+        <h3>Create the widget</h3>
+        <ol>
+          <li>Sign in to the Cloudflare dashboard.</li>
+          <li>Open <strong>Turnstile</strong> and select <strong>Add widget</strong>.</li>
+          <li>Use a recognizable widget name such as <code>aimfsecurity.com Secure Forms</code>.</li>
+          <li>Add hostname <code>aimfsecurity.com</code>. Do not include a scheme, path, port, or wildcard.</li>
+          <li>Select <strong>Managed</strong> widget mode.</li>
+          <li>Create the widget and copy its site key and secret key.</li>
+        </ol>
+        <h3>Configure WordPress</h3>
+        <ol>
+          <li>Open <strong>AIMF Forms → Settings</strong>.</li>
+          <li>Paste the public key into <strong>Turnstile Site Key</strong>.</li>
+          <li>Paste the secret into <strong>Turnstile Secret Key</strong>.</li>
+          <li>Leave reCAPTCHA and hCaptcha blank when Turnstile is used.</li>
+          <li>Save settings.</li>
+        </ol>
+        <div class="callout danger"><strong>Secret handling:</strong> never place the Turnstile secret in Divi, a shortcode, JavaScript, source control, screenshots, or configuration exports.</div>
+        <p>The widget sends action <code>aimf_secure_form</code> and form metadata such as <code>form_1</code>. The server validates the token, action, and hostname.</p>
+      </section>
+
+      <section id="csp">
+        <h2>6. Configure the live Content Security Policy</h2>
+        <p>On AIMF Security, the CSP is defined in the custom block at the top of <code>.htaccess</code>, above the WordPress-managed section.</p>
+        <h3>Required block</h3>
+        <pre># === OVERRIDE MODSECURITY CSP - ALLOW ANALYTICS AND TURNSTILE ===
+&lt;IfModule mod_headers.c&gt;
+    Header unset Content-Security-Policy
+    Header always unset Content-Security-Policy
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googletagmanager.com https://*.google-analytics.com https://challenges.cloudflare.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; frame-ancestors 'self';"
+&lt;/IfModule&gt;
+# === END CSP OVERRIDE ===</pre>
+        <h3>Safe editing process</h3>
+        <ol>
+          <li>Download a backup of <code>.htaccess</code>.</li>
+          <li>Replace only the existing custom CSP block.</li>
+          <li>Do not edit inside <code># BEGIN WordPress</code> or Newfold-managed blocks.</li>
+          <li>Save and immediately confirm the homepage and contact page still load.</li>
+          <li>Confirm only one CSP response header is returned.</li>
+        </ol>
+        <pre>curl -sI https://aimfsecurity.com/contact/ \
+  | grep -ic '^content-security-policy:'</pre>
+        <p>Expected result: <code>1</code>.</p>
+        <div class="callout warn">Do not add <code>data:</code> to <code>script-src</code>. The plugin uses <code>data-noptimize</code> and <code>data-cfasync="false"</code> to avoid optimizer rewrites instead of weakening CSP.</div>
+      </section>
+
+      <section id="cache">
+        <h2>7. Clear optimization and platform caches</h2>
+        <h3>Autoptimize</h3>
+        <ol>
+          <li>Open <strong>Settings → Autoptimize → JS, CSS &amp; HTML</strong>.</li>
+          <li>Keep <strong>Optimize JavaScript Code</strong> enabled.</li>
+          <li>Keep <strong>Do not aggregate but defer</strong> enabled.</li>
+          <li>Ensure <strong>Also defer inline JS</strong> is disabled.</li>
+          <li>Select <strong>Save Changes and Empty Cache</strong>.</li>
+        </ol>
+        <h3>Divi</h3>
+        <ol>
+          <li>Open <strong>Divi → Theme Options → Builder → Advanced</strong>.</li>
+          <li>Find <strong>Static CSS File Generation</strong>.</li>
+          <li>Select <strong>Clear</strong>.</li>
+          <li>Save changes.</li>
+        </ol>
+        <h3>Hosting and Cloudflare</h3>
+        <ol>
+          <li>Purge the Bluehost page cache.</li>
+          <li>Open Cloudflare <strong>Caching → Configuration</strong>.</li>
+          <li>Purge the contact URL or purge everything when required.</li>
+          <li>Use a new private browser window for validation.</li>
+        </ol>
+      </section>
+
+      <section id="verify">
+        <h2>8. Verify the complete production flow</h2>
+        <ol>
+          <li>Open the contact page in a logged-out private browser window.</li>
+          <li>Open developer tools, clear the Console, and reload.</li>
+          <li>Confirm there is no CSP refusal for <code>challenges.cloudflare.com/turnstile/v0/api.js</code>.</li>
+          <li>Fill every required form field.</li>
+          <li>Complete the challenge if Turnstile requests interaction.</li>
+          <li>Submit and confirm the configured success message.</li>
+          <li>Open <strong>AIMF Forms → Submissions</strong> and confirm the entry.</li>
+          <li>Confirm delivery to the notification email.</li>
+          <li>Open the correct Turnstile widget analytics.</li>
+          <li>Confirm hostname <code>aimfsecurity.com</code> and action <code>aimf_secure_form</code>.</li>
+          <li>Confirm Siteverify reports a valid token.</li>
+        </ol>
+        <div class="callout good"><strong>Production validation completed:</strong> AIMF Security stored the test submission and Cloudflare populated challenge, hostname, browser, solve-rate, and token-validation analytics.</div>
+        <p>Safari may report that a Cloudflare iframe cannot directly access the AIMF origin. This is normal same-origin isolation, not a Turnstile CSP failure.</p>
+      </section>
+
+      <section id="exports">
+        <h2>9. YubiKey-encrypted exports</h2>
+        <p>Configuration and submission exports use AES-256-GCM. Each random AES key is wrapped with the RSA-2048 public certificate whose private key remains in YubiKey PIV slot <code>9D</code>.</p>
+        <table>
+          <thead><tr><th>Export</th><th>Contents</th><th>Excluded</th></tr></thead>
+          <tbody>
+            <tr><td>Configuration</td><td>Forms, fields, choices, safe settings</td><td>CAPTCHA secrets and submissions</td></tr>
+            <tr><td>Submissions</td><td>Entries, field data, status, audit metadata</td><td>Nothing is exposed in plaintext</td></tr>
+          </tbody>
+        </table>
+        <h3>Download</h3>
+        <ul>
+          <li>Configuration: <strong>AIMF Forms → Settings → Download Configuration</strong></li>
+          <li>Submissions: <strong>AIMF Forms → Submissions → Download Encrypted Export</strong></li>
+        </ul>
+        <h3>Decrypt locally</h3>
+        <pre>"/path/to/aimf-secure-contact-form/tools/decrypt-aimf-export.sh" \
+  "/path/to/export.ascfenc" \
+  "/path/to/decrypted.json"</pre>
+        <ol>
+          <li>Insert the authorized YubiKey.</li>
+          <li>Run the utility locally.</li>
+          <li>Enter the PIV PIN only at the local prompt.</li>
+          <li>Use the decrypted JSON only for the approved task.</li>
+          <li>Securely remove the decrypted copy when finished.</li>
+        </ol>
+        <div class="callout danger"><strong>Recovery requirement:</strong> if the only YubiKey is lost or damaged, previous exports cannot be decrypted. Maintain an approved backup key or documented recovery strategy before relying on encrypted exports for archival recovery.</div>
+      </section>
+
+      <section id="troubleshoot">
+        <h2>10. Troubleshooting</h2>
+        <h3>Turnstile analytics is empty</h3>
+        <ul>
+          <li>Confirm both Turnstile keys are saved.</li>
+          <li>Confirm the correct widget and analytics time range.</li>
+          <li>Submit the form; rendering and Siteverify are different events.</li>
+          <li>Confirm CSP permits Cloudflare in <code>script-src</code>, <code>connect-src</code>, and <code>frame-src</code>.</li>
+          <li>Clear all caches after an update.</li>
+        </ul>
+        <h3>Console shows blocked <code>data:text/javascript</code></h3>
+        <ul>
+          <li>Disable Autoptimize's <strong>Also defer inline JS</strong>.</li>
+          <li>Install plugin version 1.1.0 or later.</li>
+          <li>Empty Autoptimize and platform caches.</li>
+          <li>Do not authorize executable <code>data:</code> URLs in CSP.</li>
+        </ul>
+        <h3>CAPTCHA verification fails</h3>
+        <ul>
+          <li>Confirm the site and secret keys belong to the same widget.</li>
+          <li>Confirm <code>aimfsecurity.com</code> is an authorized hostname.</li>
+          <li>Confirm outbound HTTPS access to Cloudflare Siteverify.</li>
+          <li>Remember that the plugin intentionally fails closed during provider errors.</li>
+        </ul>
+        <h3>Other console messages</h3>
+        <p>Safari tracker blocking for Google Tag Manager, logged-in Jetpack resources, unrelated <code>/metrics/</code> errors, and deprecated third-party browser APIs are separate from Turnstile. Validate Turnstile by its API load, iframe creation, successful submission, and Siteverify analytics.</p>
+      </section>
+
+      <section id="checklist">
+        <h2>11. Production launch checklist</h2>
+        <ul class="checklist">
+          <li>Plugin version 1.1.0 or later is active.</li>
+          <li>Form shortcode references the intended form ID.</li>
+          <li>Required fields and options are correct.</li>
+          <li>Notification email and success message are tested.</li>
+          <li>Turnstile site and secret keys are configured.</li>
+          <li>Hostname is restricted to <code>aimfsecurity.com</code>.</li>
+          <li>CSP permits the exact Turnstile origin.</li>
+          <li>Autoptimize does not defer inline JavaScript as data URLs.</li>
+          <li>Divi and all platform caches are cleared.</li>
+          <li>Private-window submission succeeds.</li>
+          <li>Entry appears in the WordPress backend.</li>
+          <li>Turnstile analytics shows <code>aimf_secure_form</code>.</li>
+          <li>Encrypted configuration backup has been downloaded.</li>
+          <li>YubiKey decryption has been tested.</li>
+          <li>YubiKey recovery strategy is documented.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer class="shell">AIMF Security · AIMF Secure Forms operational guide</footer>
+</body>
+</html>

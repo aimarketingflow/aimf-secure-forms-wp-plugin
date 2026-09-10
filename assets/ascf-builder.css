@@ -1,0 +1,329 @@
+/**
+ * AIMF Secure Contact Form — Form Builder Admin Styles
+ */
+
+/* Brand header */
+.ascf-brand-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.ascf-brand-logo {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+.ascf-brand-header h1 {
+    margin: 0;
+    padding: 0;
+}
+
+/* Forms list page */
+.ascf-builder-wrap .ascf-forms-table code {
+    background: #f0f0f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+/* Builder grid layout */
+.ascf-builder-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr 320px;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+/* Field types palette (left) */
+.ascf-builder-palette {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 15px;
+}
+.ascf-builder-palette h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #646970;
+}
+.ascf-field-types {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.ascf-field-type-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid #c3c4c7;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: left;
+    transition: all 0.15s;
+}
+.ascf-field-type-btn:hover {
+    border-color: #2271b1;
+    background: #f0f6fc;
+}
+.ascf-field-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #2271b1;
+}
+.ascf-icon-text:before { content: "T"; font-weight: bold; }
+.ascf-icon-email:before { content: "@"; font-weight: bold; }
+.ascf-icon-textarea:before { content: "¶"; font-weight: bold; }
+.ascf-icon-select:before { content: "▾"; font-weight: bold; }
+.ascf-icon-radio:before { content: "◉"; }
+.ascf-icon-checkbox:before { content: "☑"; }
+.ascf-icon-number:before { content: "#"; font-weight: bold; }
+
+/* Form canvas (center) */
+.ascf-builder-canvas {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+}
+.ascf-form-header {
+    margin-bottom: 20px;
+}
+.ascf-form-header #ascf-form-title {
+    font-size: 20px;
+    font-weight: 600;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    background: transparent;
+    padding: 4px 6px;
+    border-radius: 3px;
+}
+.ascf-form-header #ascf-form-title:focus {
+    border-color: #2271b1;
+    background: #fff;
+    outline: none;
+}
+.ascf-shortcode-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+.ascf-shortcode-box label {
+    font-size: 13px;
+    color: #646970;
+    white-space: nowrap;
+}
+.ascf-shortcode-box input {
+    flex: 1;
+    max-width: 300px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* Fields container */
+.ascf-fields-container {
+    min-height: 200px;
+    border: 2px dashed #c3c4c7;
+    border-radius: 4px;
+    padding: 10px;
+}
+.ascf-no-fields {
+    text-align: center;
+    color: #646970;
+    padding: 40px 0;
+    font-style: italic;
+}
+
+/* Builder field card */
+.ascf-builder-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    background: #f6f7f7;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.ascf-builder-field:hover {
+    border-color: #2271b1;
+    background: #f0f6fc;
+}
+.ascf-builder-field.selected {
+    border-color: #2271b1;
+    background: #f0f6fc;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+.ascf-field-handle {
+    cursor: grab;
+    color: #c3c4c7;
+    font-size: 18px;
+    user-select: none;
+}
+.ascf-field-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ascf-field-type-label {
+    background: #dcdcde;
+    color: #3c434a;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.ascf-field-label-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+.ascf-badge-required {
+    background: #d63638;
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+.ascf-field-controls {
+    display: flex;
+    gap: 4px;
+}
+.ascf-field-controls button {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #c3c4c7;
+    background: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ascf-field-controls button:hover {
+    border-color: #2271b1;
+    background: #f0f6fc;
+}
+.ascf-btn-remove:hover {
+    border-color: #d63638;
+    background: #fcf0f1;
+    color: #d63638;
+}
+
+/* Builder actions */
+.ascf-builder-actions {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.ascf-save-status {
+    font-size: 13px;
+}
+.ascf-save-status.saving { color: #2271b1; }
+.ascf-save-status.saved { color: #00a32a; font-weight: 600; }
+.ascf-save-status.error { color: #d63638; font-weight: 600; }
+
+/* Settings panel (right) */
+.ascf-builder-settings {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 15px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.ascf-builder-settings h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #646970;
+    border-bottom: 1px solid #c3c4c7;
+    padding-bottom: 8px;
+}
+.ascf-settings-empty {
+    color: #646970;
+    font-style: italic;
+    font-size: 13px;
+}
+.ascf-setting-row {
+    margin-bottom: 14px;
+}
+.ascf-setting-row label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3c434a;
+    margin-bottom: 4px;
+}
+.ascf-setting-row input[type="text"],
+.ascf-setting-row input[type="email"],
+.ascf-setting-row input[type="number"],
+.ascf-setting-row textarea {
+    width: 100%;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    padding: 6px 8px;
+    font-size: 13px;
+}
+.ascf-setting-row input:focus,
+.ascf-setting-row textarea:focus {
+    border-color: #2271b1;
+    outline: none;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+.ascf-setting-row textarea {
+    resize: vertical;
+}
+.ascf-setting-check label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+.ascf-setting-inline {
+    display: flex;
+    gap: 10px;
+}
+.ascf-setting-inline > div {
+    flex: 1;
+}
+.ascf-form-settings-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #c3c4c7;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .ascf-builder-grid {
+        grid-template-columns: 180px 1fr 280px;
+    }
+}
+@media (max-width: 900px) {
+    .ascf-builder-grid {
+        grid-template-columns: 1fr;
+    }
+    .ascf-builder-palette .ascf-field-types {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
