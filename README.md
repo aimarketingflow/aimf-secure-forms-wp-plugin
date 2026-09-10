@@ -51,7 +51,7 @@ Legacy compatibility:
 
 The plugin checks this repository's latest published GitHub Release and uses the standard WordPress plugin update interface. A release must use a version tag such as `v1.2.0` and include an installable asset named exactly `aimf-secure-forms.zip`.
 
-For a private repository, define a fine-grained token with repository-scoped, read-only Contents access in `wp-config.php`:
+This repository is public, so update checks work without authentication. If you fork it into a private repository, define a fine-grained token with repository-scoped, read-only Contents access in `wp-config.php`:
 
 ```php
 define( 'AIMF_SCF_GITHUB_TOKEN', 'PASTE_READ_ONLY_TOKEN_HERE' );

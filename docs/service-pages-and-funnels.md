@@ -376,13 +376,13 @@ The plugin checks the latest published GitHub Release. Pushing commits alone doe
 3. A published GitHub Release.
 4. An attached installable asset named exactly `aimf-secure-forms.zip`.
 
-The repository is private, so each WordPress installation must define a fine-grained, read-only GitHub token in `wp-config.php` above the stop-editing line:
+The repository is public, so update checks work without authentication. If you fork it into a private repository, define a fine-grained, read-only GitHub token in `wp-config.php` above the stop-editing line:
 
 ```php
 define( 'AIMF_SCF_GITHUB_TOKEN', 'PASTE_READ_ONLY_TOKEN_HERE' );
 ```
 
-Restrict the token to the AIMF Secure Forms repository with read-only Contents access. Never store it in the plugin, WordPress database, form configuration, source control, screenshots, or support messages. If the repository becomes public, remove the constant; public release checks work without authentication.
+Restrict the token to the AIMF Secure Forms repository with read-only Contents access. Never store it in the plugin, WordPress database, form configuration, source control, screenshots, or support messages. Public repositories do not need this constant.
 
 WordPress checks releases through its normal update transient and displays the standard plugin update notice. A six-hour cache limits GitHub API traffic. Use **Dashboard > Updates > Check again** when an immediate refresh is needed.
 

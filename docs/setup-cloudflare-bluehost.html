@@ -155,9 +155,9 @@
         <div class="callout good"><strong>Preserved during replacement:</strong> forms, settings, CAPTCHA keys, and stored submissions remain in WordPress. Do not delete the plugin when the goal is only to update it.</div>
         <h3>Enable GitHub update notifications</h3>
         <p>The plugin checks published GitHub Releases. A normal source push does not create a WordPress update notice. Each update needs a higher plugin version, matching tag, published release, and an attached asset named <code>aimf-secure-forms.zip</code>.</p>
-        <p>Because the repository is private, create a fine-grained GitHub token restricted to this repository with read-only Contents access. Add it above the stop-editing line in <code>wp-config.php</code>:</p>
+        <p>This repository is public, so update checks work without authentication. If you fork it into a private repository, create a fine-grained GitHub token restricted to that repository with read-only Contents access. Add it above the stop-editing line in <code>wp-config.php</code>:</p>
         <pre>define( 'AIMF_SCF_GITHUB_TOKEN', 'PASTE_READ_ONLY_TOKEN_HERE' );</pre>
-        <div class="callout danger">Never commit the token or enter it in plugin settings, form configuration, screenshots, or support messages. If the repository becomes public, remove this constant; public release checks need no token.</div>
+        <div class="callout danger">Never commit the token or enter it in plugin settings, form configuration, screenshots, or support messages. Public repositories do not need this constant.</div>
         <p>WordPress caches release metadata for six hours. Use <strong>Dashboard → Updates → Check again</strong> to request an immediate refresh.</p>
       </section>
 
